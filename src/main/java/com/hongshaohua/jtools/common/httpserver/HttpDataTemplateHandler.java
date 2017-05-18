@@ -1,8 +1,8 @@
 package com.hongshaohua.jtools.common.httpserver;
 
+import com.hongshaohua.jtools.common.json.JsonUtils;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.FullHttpRequest;
-import nc.common.json.JsonUtils;
 
 import java.lang.reflect.ParameterizedType;
 
@@ -16,6 +16,11 @@ public abstract class HttpDataTemplateHandler<REQUEST_DATA, RESPONSE_DATA> exten
 
     public HttpDataTemplateHandler(String name) {
         super(name);
+        this.init();
+    }
+
+    @SuppressWarnings("unchecked")
+    private void init() {
         this.requestDataClass = (Class<REQUEST_DATA>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
         this.responseDataClass = (Class<RESPONSE_DATA>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
     }
