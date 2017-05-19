@@ -1,5 +1,7 @@
 package com.hongshaohua.jtools.common.converter;
 
+import org.springframework.core.convert.converter.Converter;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +20,29 @@ public interface DataConverter<SOURCE, TARGET> {
     }
 
     public static <SOURCE, TARGET> List<TARGET> toList(DataConverter<SOURCE, TARGET> converter, List<SOURCE> sourceList) {
+        if(sourceList == null) {
+            return null;
+        }
+        List<TARGET> targetList = new ArrayList<>();
+        for(SOURCE source : sourceList) {
+            if(source != null) {
+                TARGET target = converter.convert(source);
+                if(target != null) {
+                    targetList.add(target);
+                }
+            }
+        }
+        return targetList;
+    }
+
+    public static <SOURCE, TARGET> TARGET to(Converter<SOURCE, TARGET> converter, SOURCE source) {
+        if(source == null) {
+            return null;
+        }
+        return converter.convert(source);
+    }
+
+    public static <SOURCE, TARGET> List<TARGET> toList(Converter<SOURCE, TARGET> converter, List<SOURCE> sourceList) {
         if(sourceList == null) {
             return null;
         }
