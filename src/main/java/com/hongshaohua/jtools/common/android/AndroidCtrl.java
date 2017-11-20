@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 
 /**
  * Created by Aska on 2017/9/25.
@@ -132,7 +133,7 @@ public class AndroidCtrl {
 
         try {
             File file = new File(localTmpPath);
-            String content = FileUtils.readFileToString(file);
+            String content = FileUtils.readFileToString(file, Charset.defaultCharset());
             file.delete();
             return content;
         } catch (IOException e) {
