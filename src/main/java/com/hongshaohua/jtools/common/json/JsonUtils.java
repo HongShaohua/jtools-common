@@ -1,5 +1,8 @@
 package com.hongshaohua.jtools.common.json;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -27,6 +30,21 @@ public class JsonUtils {
 	
 	public static <T> List<T> json2List(String jsonStr, Class<T> cls) throws Exception {
 		ObjectMapper objMapper = new ObjectMapper();
+		JavaType type = objMapper.getTypeFactory().constructCollectionType(ArrayList.class, cls);
+		return objMapper.readValue(jsonStr, type);
+	}
+
+	public static <T> T json2ObjIgnorable(String jsonStr, Class<T> cls) throws Exception {
+		ObjectMapper objMapper = new ObjectMapper();
+		objMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+		objMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		return objMapper.readValue(jsonStr, cls);
+	}
+
+	public static <T> List<T> json2ListIgnorable(String jsonStr, Class<T> cls) throws Exception {
+		ObjectMapper objMapper = new ObjectMapper();
+		objMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+		objMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		JavaType type = objMapper.getTypeFactory().constructCollectionType(ArrayList.class, cls);
 		return objMapper.readValue(jsonStr, type);
 	}
