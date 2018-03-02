@@ -26,7 +26,9 @@ public class NameValueParser {
         String[] items = data.split(listSplitStr);
         for(String item : items) {
             NameValuePair pair = parse(item, nameValueSplitStr);
-            pairs.add(pair);
+            if(pair != null) {
+                pairs.add(pair);
+            }
         }
         return pairs;
     }
