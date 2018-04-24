@@ -17,13 +17,25 @@ public class AndroidCtrl {
     private static final Logger logger = LoggerFactory.getLogger(AndroidCtrl.class);
 
     private AndroidCtrlConf conf;
+    private String adbPath;
 
     public AndroidCtrl(AndroidCtrlConf conf) {
         this.conf = conf;
     }
 
+    private synchronized String adbPath() {
+        if(this.adbPath == null) {
+            if(this.conf.device() == null) {
+                this.adbPath = this.conf.adbPath();
+            } else {
+                this.adbPath = this.conf.adbPath() + " -s " + this.conf.device();
+            }
+        }
+        return this.adbPath;
+    }
+
     private synchronized String cmd(String cmd) {
-        return this.conf.adbPath() + cmd;
+        return this.adbPath() + cmd;
     }
 
     private synchronized String phoneTmpFilePath(String filename) {
