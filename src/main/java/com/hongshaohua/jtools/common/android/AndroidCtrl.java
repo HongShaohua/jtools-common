@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.Charset;
 
 /**
  * Created by Aska on 2017/9/25.
@@ -17,13 +16,25 @@ public class AndroidCtrl {
     private static final Logger logger = LoggerFactory.getLogger(AndroidCtrl.class);
 
     private AndroidCtrlConf conf;
+    private String adbPath;
 
     public AndroidCtrl(AndroidCtrlConf conf) {
         this.conf = conf;
     }
 
+    private synchronized String adbPath() {
+        if(this.adbPath == null) {
+            if(this.conf.device() == null) {
+                this.adbPath = this.conf.adbPath();
+            } else {
+                this.adbPath = this.conf.adbPath() + " -s " + this.conf.device();
+            }
+        }
+        return this.adbPath;
+    }
+
     private synchronized String cmd(String cmd) {
-        return this.conf.adbPath() + cmd;
+        return this.adbPath() + cmd;
     }
 
     private synchronized String phoneTmpFilePath(String filename) {
@@ -133,7 +144,8 @@ public class AndroidCtrl {
 
         try {
             File file = new File(localTmpPath);
-            String content = FileUtils.readFileToString(file, Charset.defaultCharset());
+            //String content = FileUtils.readFileToString(file, Charset.defaultCharset());
+            String content = FileUtils.readFileToString(file, "UTF-8");
             file.delete();
             return content;
         } catch (IOException e) {
@@ -156,6 +168,12 @@ public class AndroidCtrl {
     //借助使用ADB Keyboard输入回车
     public synchronized void adbKeyboardEnter() {
         String cmd = this.shell("am broadcast -a ADB_EDITOR_CODE --ei code 3");
+        this.execCmd(cmd);
+    }
+
+    //借助使用ADB Keyboard输入退格
+    public synchronized void adbKeyboardDel() {
+        String cmd = this.shell("am broadcast -a ADB_INPUT_CODE --ei code 67");
         this.execCmd(cmd);
     }
 }

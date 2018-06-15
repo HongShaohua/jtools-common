@@ -5,14 +5,24 @@ package com.hongshaohua.jtools.common.android;
  */
 public class AndroidCtrlConf {
 
+    private String device;
     private String adbPath;
     private String phoneTmpDirPath;
     private String localTmpDirPath;
 
     public AndroidCtrlConf(String adbPath, String phoneTmpDirPath, String localTmpDirPath) {
+        this(null, adbPath, phoneTmpDirPath, localTmpDirPath);
+    }
+
+    public AndroidCtrlConf(String device, String adbPath, String phoneTmpDirPath, String localTmpDirPath) {
+        this.device = device;
         this.adbPath = adbPath;
         this.phoneTmpDirPath = phoneTmpDirPath;
         this.localTmpDirPath = localTmpDirPath;
+    }
+
+    public String device() {
+        return device;
     }
 
     public String adbPath() {
