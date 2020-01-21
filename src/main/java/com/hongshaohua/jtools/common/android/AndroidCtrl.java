@@ -1,11 +1,12 @@
 package com.hongshaohua.jtools.common.android;
 
 import com.hongshaohua.jtools.common.android.ui.ViewHierarchy;
-import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.FileCopyUtils;
 
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 
 /**
@@ -145,7 +146,8 @@ public class AndroidCtrl {
         try {
             File file = new File(localTmpPath);
             //String content = FileUtils.readFileToString(file, Charset.defaultCharset());
-            String content = FileUtils.readFileToString(file, "UTF-8");
+            //String content = FileUtils.readFileToString(file, "UTF-8");
+            String content = FileCopyUtils.copyToString(new FileReader(file));
             file.delete();
             return content;
         } catch (IOException e) {
