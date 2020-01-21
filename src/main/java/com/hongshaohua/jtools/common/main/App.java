@@ -3,7 +3,9 @@ package com.hongshaohua.jtools.common.main;
 import com.hongshaohua.jtools.common.android.AndroidShell;
 import com.hongshaohua.jtools.common.android.AndroidTouch;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -16,6 +18,8 @@ public class App
     public static void main( String[] args )
     {
         System.out.println( "Hello World!" );
+
+        genSN();
 
         test();
 
@@ -55,6 +59,23 @@ public class App
             e.printStackTrace();
         }
 
+    }
+
+    public static void genSN() {
+        try {
+            VismartySN sn = new VismartySN();
+            for(int i = 0; i < 100; i++) {
+                VismartySNInfo info1 = new VismartySNInfo(210, 1548399057, i);
+                sn.gen(info1, VismartySN.password);
+
+                VismartySNInfo info2 = new VismartySNInfo(info1.getSn());
+                sn.parse(info2, VismartySN.password);
+                System.out.println(String.format("%02d", i) + " - " + info2.getSn());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.exit(0);
     }
 
     public static void test() {
